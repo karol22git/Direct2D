@@ -14,6 +14,6 @@ public:
 	D2D1_ELLIPSE e = D2D1::Ellipse(D2D1::Point2F(50, 50), 15, 15);
 private:
 	ID2D1Factory* factory;
-	ID2D1HwndRenderTarget* renderTarget;
+	ID2D1HwndRenderTarget* renderTarget;s
 	
 };
