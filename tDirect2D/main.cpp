@@ -3,32 +3,40 @@
 #include <tchar.h>
 #include <stdlib.h>
 #include "Graphics.h"
-//#include "WindowsMessageMap.h"
-Graphics* g;
-LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+#include <iostream>
 
+#include "Level1.h"
+#include "GameController.h"
+Graphics* g;
+void redraw(HWND hWnd)	{
+	RECT* r = new RECT();
+	r->left = 10;;
+	r->top = 10;
+	r->right = 20;
+	r->bottom = 20;
+	RedrawWindow(hWnd,const_cast<const RECT*>(r), nullptr, NULL);
+
+}
+LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+	int add = 10;
 	switch (msg) {
 	case WM_KEYDOWN:
-		if (wParam == 'W') {
+		if (wParam == VK_UP) {
 			SetWindowText(hWnd, _T("Hello1"));
-			// ++g->e.point.x;
-			++g->e.point.y;
+			g->e.point.y -= add;
 
 		}
-		if (wParam == 'S') {
+		else if (wParam == VK_DOWN) {
 			SetWindowText(hWnd, _T("Hello2"));
-			//--g->e.point.x;
-			--g->e.point.y;
+			g->e.point.y += add;
+		}
+		else if (wParam == VK_LEFT) {
+			g->e.point.x -=add;
+		}
+		else if (wParam == VK_RIGHT) {
+			g->e.point.x += add;
 		}
 		UpdateWindow(hWnd);
-		break;
-	case WM_PAINT:
-		g->BeginDraw();
-
-		g->ClearScreen(0.0f, 0.f, 0.5f);
-		g->DrawCircle(100, 100, 50, 1.0f, 0.0, 0.0, 1.0);
-
-		g->EndDraw();
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
@@ -63,8 +71,7 @@ int CALLBACK WinMain(
 	wcex.hIconSm = nullptr;
 
 	RegisterClassEx(&wcex);
-	//proper size of our window
-	RECT rect = { 0,0,800,600 };
+	RECT rect = { 0,0,1200,800 };
 	AdjustWindowRectEx(&rect, 0, false, 0 );
 	g = new Graphics();
 	HWND h = CreateWindowEx(
@@ -86,11 +93,23 @@ int CALLBACK WinMain(
 		return -1;
 	}
 	ShowWindow(h, SW_SHOW);
-	MSG msg;
-	while (GetMessage(&msg,nullptr, 0,0) > 0) {
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-	}
 
+
+	GameController::LoadInitialLevel(new Level1());
+	MSG message;
+	message.message = WM_NULL;
+	while (message.message != WM_QUIT) {
+		if (PeekMessage(&message, NULL, 0, 0, PM_REMOVE)) {
+			DispatchMessage(&message);
+
+		}
+		else {
+			GameController::Update();
+
+			g->BeginDraw();
+			GameController::Render(g);
+			g->EndDraw();
+		}
+	}
 	return 0;
 }
