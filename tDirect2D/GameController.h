@@ -13,6 +13,6 @@ public:
 	static void Init();
 	static void LoadInitialLevel(GameLevel*);
 	static void SwitchLevel(GameLevel*);
-	static void Render(Graphics*);
+	static void Render();
 	static void Update();
 };

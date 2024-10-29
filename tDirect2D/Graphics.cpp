@@ -50,3 +50,8 @@ void Graphics::DrawCircle(float x, float y, float radius, float r, float g, floa
 	//renderTarget-> DrawEllipse(c.e, brush, 3.0f);
 	brush->Release();
 }
+
+
+ID2D1RenderTarget* Graphics::GetRenderTarget() {
+	return renderTarget;
+}

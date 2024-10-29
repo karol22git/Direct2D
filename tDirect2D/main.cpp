@@ -92,6 +92,7 @@ int CALLBACK WinMain(
 		delete g;
 		return -1;
 	}
+	GameLevel::Init(g);
 	ShowWindow(h, SW_SHOW);
 
 
@@ -107,7 +108,7 @@ int CALLBACK WinMain(
 			GameController::Update();
 
 			g->BeginDraw();
-			GameController::Render(g);
+			GameController::Render();
 			g->EndDraw();
 		}
 	}

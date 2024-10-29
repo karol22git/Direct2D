@@ -5,6 +5,7 @@
 void Level1::Load() {
 	y = 0;
 	ySpeed = 0;
+	sprite = new SpriteSheet(L"test.png", gfx);
 }
 
 void Level1::Unload() {
@@ -20,7 +21,9 @@ void Level1::Update() {
 	}
 }
 
-void Level1::Render(Graphics* gfx) {
+void Level1::Render() {
 	gfx->ClearScreen(0.0f, 0.0f, 0.5f);
 	gfx->DrawCircle(375.0f, y, 50.0, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	sprite->Draw();
 }
